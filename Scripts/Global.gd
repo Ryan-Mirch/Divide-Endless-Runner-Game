@@ -21,5 +21,5 @@ func _input(event):
 			lastSplit = 0
 			for n in get_tree().get_nodes_in_group("Segment"):
 				if n.leading:
-					n.split()
+					n.activate()
 			
