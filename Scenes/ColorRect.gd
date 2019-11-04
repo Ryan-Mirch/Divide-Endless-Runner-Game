@@ -7,7 +7,8 @@ onready var spawnPoint = $"Control"
 
 var leading = true
 var direction = 0
-var ID = 0
+var leftX = rect_position.x
+var rightX = rect_position.x + rect_size.x
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -17,37 +18,63 @@ func _ready():
 func set_direction(d):
 	direction = d
 	rect_rotation = rect_rotation - 45*direction
+	print(rect_rotation)
+	if direction == 0:
+		disableColliders()
 	
 func _process(delta):
 	update_length(delta)
 	
 	
 func update_length(delta):
-	rect_position.y += delta * Global.speed
+	var pixelsToMove
+	var speed = Global.speed
 	
-	if leading:
-		if direction != 0:
-			rect_size.y += delta * Global.speed * 1.43
-			
-		else:
-			rect_size.y += delta * Global.speed
+	pixelsToMove = (speed * (delta))
+	#pixelsToMove = 1
+	
+	
+	
+	if direction == 0 && leading:
+		rect_size.y += pixelsToMove
+	
+	
+	if direction != 0 && leading:
+		rect_position.x -= pixelsToMove * direction
+		rect_size.y += pixelsToMove * 1.4
 		
-func straighten():
+	if !leading:
+		rect_position.y += pixelsToMove
+		
+func straighten(xPos):
+	if direction == 0: return
+	leading = false
+	disableColliders()
+	
 	var seg = Global.segment.instance()
-		
+	seg.disableColliders()
 	get_parent().add_child(seg)
 	
 	seg.rect_position = spawnPoint.get_global_position()
 	
+	seg.rect_position.y += 2
+	
 	if direction < 0:			
 		seg.rect_position.x -= (rect_size.x / 2) +2
-		seg.rect_position.y += 3
+		
 		
 	if direction > 0:			
 		seg.rect_position.x -= (rect_size.x / 2) - 1
-		seg.rect_position.y += 3
+		
+	if xPos != -1:
+		seg.rect_position.x = xPos
 		
 func split():
+	if direction != 0: return
+	
+	leading = false
+	disableColliders()
+	
 	var seg1 = Global.segment.instance()
 	var seg2 = Global.segment.instance()
 	
@@ -65,34 +92,41 @@ func split():
 	
 	seg1.set_direction(-1)
 	seg2.set_direction(1)
+		
+func combine(hitXPos):	
 	
-	seg1.ID = randi()%10001 + 1
-	seg2.ID = seg1.ID
+	var thisXPos = $"Control".get_global_transform().origin.x	
+	var xPos = ((thisXPos + hitXPos) / 2) - rect_size.x/2
 	
-func activate():
+	straighten(xPos)
+
+
+func _on_AreaLeft_area_entered(area):
+	if direction == -1:return
+	if direction == 0:return
+	
+	
+		
+	
+	disableColliders()
 	leading = false
-	#color = Color(1,0,0,1)
+
+
+func _on_AreaRight_area_entered(area):
+	if direction == 1:return
+	if direction == 0:return
+	if leading == false:return
 	
-	if direction == 0:
-		split()
-		
-	else:
-		straighten()
-		
-		
-func _on_Area2D_area_entered(area):
-	var index = area.get_parent().get_index()
-	
-	if ID ==  area.get_parent().ID: return
-	
-	combine(index)	
-	print(index)
-	
-	
-func combine(combineIndex):
+	disableColliders()
 	leading = false
-	if get_index() > combineIndex:
-		straighten()
-		
 	
+	if area.is_in_group("Barrier"): return
 	
+	var xPos = area.get_parent().get_global_transform().origin.x
+	print(xPos)
+	
+	combine(xPos)
+	
+func disableColliders():
+	$"Control/AreaLeft/CollisionShape2D".disabled = true
+	$"Control/AreaRight/CollisionShape2D".disabled = true

@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 19.7149, 806.304 )
+
+[node name="Barrier" type="ColorRect"]
+margin_right = 40.0
+margin_bottom = 1607.0
+
+[node name="Area2D" type="Area2D" parent="." groups=[
+"Barrier",
+]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 20.4803, 807.351 )
+shape = SubResource( 1 )
