@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/ColorRect.gd" type="Script" id=1]
 
@@ -14,15 +14,62 @@ func _ready():
 	position = Vector2(rect_position.x -5, rect_position.y - 3)
 	
 func _draw():
-	draw_circle(position,3,Color(0,0,1,1))
+	pass
+	#draw_circle(position,3,Color(0,0,1,1))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 "
 
-[sub_resource type="CircleShape2D" id=2]
-radius = 1.0
+[sub_resource type="GDScript" id=4]
+script/source = "extends Area2D
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+func get_twin():
+	return $\"../..\".twin
+	
+func get_seg():
+	return $\"../..\"
+"
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 0.5
+height = 2.0
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Area2D
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+func get_twin():
+	return $\"../..\".twin
+	
+func get_seg():
+	return $\"../..\""
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 2.86679, 4.57068 )
 
 [node name="Segment" type="ColorRect" groups=[
 "Segment",
@@ -44,24 +91,23 @@ anchor_left = 0.5
 anchor_right = 0.5
 script = SubResource( 1 )
 
-[node name="AreaLeft" type="Area2D" parent="Control"]
-position = Vector2( 5.02618, -0.0466309 )
-rotation = -3.14159
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/AreaLeft"]
-position = Vector2( 9.06332, -0.0299072 )
-shape = SubResource( 2 )
-one_way_collision = true
-one_way_collision_margin = 0.0
-
-[node name="AreaRight" type="Area2D" parent="Control"]
-position = Vector2( 5.0799, 0.0600586 )
+[node name="AreaFront" type="Area2D" parent="Control"]
+position = Vector2( 5.0799, 0.0599365 )
 rotation = 3.14159
+script = SubResource( 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/AreaRight"]
-position = Vector2( 0.945527, 0.0238037 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/AreaFront"]
+position = Vector2( 4.87033, 0.071167 )
 shape = SubResource( 2 )
 one_way_collision = true
 one_way_collision_margin = 0.0
-[connection signal="area_entered" from="Control/AreaLeft" to="." method="_on_AreaLeft_area_entered"]
-[connection signal="area_entered" from="Control/AreaRight" to="." method="_on_AreaRight_area_entered"]
+
+[node name="AreaCenter" type="Area2D" parent="Control"]
+position = Vector2( 0.174194, 2.26489 )
+script = SubResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/AreaCenter"]
+position = Vector2( 0.032135, 2.38074 )
+shape = SubResource( 5 )
+[connection signal="area_entered" from="Control/AreaFront" to="." method="_on_AreaFront_area_entered"]
+[connection signal="area_entered" from="Control/AreaCenter" to="." method="_on_AreaCenter_area_entered"]

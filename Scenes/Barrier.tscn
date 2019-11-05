@@ -1,16 +1,76 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 19.7149, 806.304 )
+[sub_resource type="GDScript" id=3]
+script/source = "extends ColorRect
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	update_length(delta)
+
+func update_length(delta):
+	var pixelsToMove
+	var speed = Global.speed
+	
+	pixelsToMove = (speed * (delta))
+	
+	rect_position.y += pixelsToMove
+		
+	if rect_position.y > $\"../Garbage\".rect_position.y:
+		print(\"barrier deleted\")
+		queue_free()
+
+
+func _on_AreaBarrier_area_entered(area):
+	if area.name == \"AreaFront\":
+		area.get_seg().leading = false
+"
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Area2D
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+func get_twin():
+	return self
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 67.1124, 20.8137 )
 
 [node name="Barrier" type="ColorRect"]
-margin_right = 40.0
-margin_bottom = 1607.0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -528.0
+margin_top = 934.0
+margin_right = -391.0
+margin_bottom = -627.0
+script = SubResource( 3 )
 
-[node name="Area2D" type="Area2D" parent="." groups=[
+[node name="AreaBarrier" type="Area2D" parent="." groups=[
 "Barrier",
 ]]
+script = SubResource( 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 20.4803, 807.351 )
-shape = SubResource( 1 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaBarrier"]
+position = Vector2( 68.9339, 19.0043 )
+shape = SubResource( 2 )
+[connection signal="area_entered" from="AreaBarrier" to="." method="_on_AreaBarrier_area_entered"]
