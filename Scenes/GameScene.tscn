@@ -10,15 +10,13 @@ script/source = "extends Control
 # Declare member variables here. Examples:
 # var a = 2
 # var b = \"text\"
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
-#	pass
-"
+#	pass"
 
 [node name="GameScene" type="Control"]
 anchor_right = 1.0
@@ -56,7 +54,7 @@ margin_bottom = 0.0
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 140.303
-margin_top = 96.997
-margin_right = 277.303
-margin_bottom = 135.997
+margin_left = 118.667
+margin_top = 100.088
+margin_right = 255.667
+margin_bottom = 139.088

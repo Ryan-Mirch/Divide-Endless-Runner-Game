@@ -4,8 +4,6 @@ extends ColorRect
 # var a = 2
 # var b = "text"
 onready var spawnPoint = $"Control"
-
-var leading = true
 var direction = 0
 var leftX = rect_position.x
 var rightX = rect_position.x + rect_size.x
@@ -24,12 +22,9 @@ func set_direction(d):
 	
 	if direction != 0:		
 		rect_rotation = rect_rotation - 45*direction
-		call_deferred("disableAreaCenter")
-		
-	if direction == 0:
-		call_deferred("disableAreaFront")
 	
 func _process(delta):
+	checkCombineCollisions()
 	update_length(delta)
 	
 	
@@ -39,24 +34,23 @@ func update_length(delta):
 	
 	pixelsToMove = (speed * (delta))
 	
-	if direction == 0 && leading:
+	if direction == 0 && is_in_group("Leading"):
 		rect_size.y += pixelsToMove
 	
 	
-	if direction != 0 && leading:
+	if direction != 0 && is_in_group("Leading"):
 		rect_position.x -= pixelsToMove * direction
 		rect_size.y += pixelsToMove * 1.4
 		
-	if !leading:
+	if !is_in_group("Leading"):
 		rect_position.y += pixelsToMove
 		
 	if rect_position.y > $"../Garbage".rect_position.y:
 		queue_free()
 		
-func straighten(xPos):
+func straighten():
 	if direction == 0: return
-	leading = false
-	call_deferred("disableAreaFront")
+	remove_from_group("Leading")
 	
 	var seg = Global.segment.instance()
 	get_parent().add_child(seg)
@@ -66,19 +60,15 @@ func straighten(xPos):
 	seg.rect_position.y = Global.segY
 	
 	if direction < 0:			
-		seg.rect_position.x -= (rect_size.x / 2) +2		
+		seg.rect_position.x -= (rect_size.x / 2) + 1.5		
 		
 	if direction > 0:			
-		seg.rect_position.x -= (rect_size.x / 2) - 1
-		
-	if xPos != -1:
-		seg.rect_position.x = xPos
+		seg.rect_position.x -= (rect_size.x / 2) - 1.5
 		
 func split():
 	if direction != 0: return
 	
-	leading = false
-	call_deferred("disableAreaFront")
+	remove_from_group("Leading")
 	
 	seg1 = Global.segment.instance()
 	seg2 = Global.segment.instance()
@@ -101,49 +91,32 @@ func split():
 	seg1.set_direction(-1)
 	seg2.set_direction(1)
 	
+func checkCombineCollisions():
+	if !is_in_group("Leading"): return
+	if direction == 0: return
 	
-	
-	
+	for s in get_tree().get_nodes_in_group("Leading"):
+		if s == self: continue
+		if s == twin: continue
+		var left = s.rect_position.x - s.rect_size.x/8
+		var right = s.rect_position.x + s.rect_size.x/8
 		
-func combine(hitXPos):	
-	
-	var thisXPos = $"Control".get_global_transform().origin.x	
-	var xPos = ((thisXPos + hitXPos) / 2) - rect_size.x/2
-	
-	straighten(xPos)
+		if rect_position.x < right && rect_position.x > left:
+			if s.direction == 0:
+				remove_from_group("Leading")
+				return
+			
+			s.remove_from_group("Leading")
+			remove_from_group("Leading")
+				
+			var xPos = (s.rect_position.x + rect_position.x) / 2	
+			var seg = Global.segment.instance()
+			get_parent().add_child(seg)
+			seg.rect_position.y = Global.segY
+			seg.rect_position.x = xPos
 
-	
-func disableAreaFront():
-	$"Control/AreaFront/CollisionShape2D".disabled = true
-	
-func disableAreaCenter():
-	$"Control/AreaCenter/CollisionShape2D".disabled = true
-	
-
-
-func _on_AreaFront_area_entered(area):
-	if area.name == "AreaCenter":return
-	if direction == 0:return
-	if leading == false:return
-	if area.get_twin() == self: return
-	leading = false
-	
-	if area.is_in_group("Barrier"): return
-	if get_index() < area.get_seg().get_index(): return
-	
-	
-	var xPos = area.get_parent().get_global_transform().origin.x
-	#print(xPos)
-	
-	combine(xPos)
-
-
-func _on_AreaCenter_area_entered(area):
-	if leading == false: return
-	if area.name != "AreaFront": return
-	if area == $"Control/AreaFront": return
-	if area.get_seg() == self: return
-	if area.get_seg() == seg1: return
-	if area.get_seg() == seg2: return
-	
-	area.get_seg().leading = false
+func _on_Area2D_area_entered(area):
+	if !is_in_group("Leading"): return
+	if area.name == "Barrier" || area.name == "Border":
+		remove_from_group("Leading")
+		$"Control/Area2D/CollisionShape2D".call_deferred("disabled",true)

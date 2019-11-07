@@ -1,8 +1,8 @@
 extends Node
 
-var speed = 50
+var speed = 100
 
-var splitDelay = 0.5 
+var splitDelay = 0.1
 var lastSplit = 0
 onready var segY = get_viewport().size.y - 250
 
@@ -22,19 +22,18 @@ func _input(event):
 		if lastSplit > splitDelay:
 			lastSplit = 0
 			var split = true
-			for n in get_tree().get_nodes_in_group("Segment"):
-				if n.direction != 0 && n.leading:
+			for n in get_tree().get_nodes_in_group("Leading"):
+				if n.direction != 0:
 					split = false
 			
 			if split: 
-				for n in get_tree().get_nodes_in_group("Segment"):
-					if n.leading:
-						n.split()
+				for n in get_tree().get_nodes_in_group("Leading"):
+					n.split()
+						
 				
 				
 			else: if !split: 
-				for n in get_tree().get_nodes_in_group("Segment"):
-					if n.leading:
-						n.straighten(-1)
+				for n in get_tree().get_nodes_in_group("Leading"):
+					n.straighten()
 			
 			

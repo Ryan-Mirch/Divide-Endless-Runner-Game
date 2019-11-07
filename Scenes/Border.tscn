@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
 script/source = "extends Area2D
 
 # Declare member variables here. Examples:
@@ -15,22 +15,20 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func get_twin():
-	return self
 "
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 19.7149, 806.304 )
 
 [node name="Border" type="ColorRect"]
 margin_right = 40.0
 margin_bottom = 1607.0
 
-[node name="Area2D" type="Area2D" parent="." groups=[
+[node name="Border" type="Area2D" parent="." groups=[
 "Barrier",
 ]]
-script = SubResource( 2 )
+script = SubResource( 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Border"]
 position = Vector2( 20.4803, 807.351 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
