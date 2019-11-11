@@ -14,7 +14,7 @@ var leading = true
 var side = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	get_parent().addBarrier()
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,7 +36,7 @@ func update_position(delta):
 		
 	if position.y + get_point_position(0).y  > 0 && leading:
 		spawn_border()
-		print(\"spawned\")
+		print(\"spawned\") 
 		
 func setPoints(p1,p2):
 	position = Vector2(0,0)

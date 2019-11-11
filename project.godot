@@ -27,7 +27,7 @@ Global="*res://Scripts/Global.gd"
 
 window/size/width=900
 window/size/height=1600
-window/size/test_width=450
+window/size/test_width=650
 window/size/test_height=800
 window/stretch/aspect="keep"
 

@@ -9,14 +9,15 @@ onready var segY = get_viewport().size.y - 250
 onready var botY = get_viewport().size.y
 onready var centerX = get_viewport().size.x / 2
 
-onready var borderLimit_LeftOuter = 10
+onready var borderLimit_LeftOuter = centerX - 300
 onready var borderLimit_LeftInner = centerX - 20
-onready var borderLimit_RightOuter = get_viewport().size.x - 10
+onready var borderLimit_RightOuter = centerX + 300
 onready var borderLimit_RightInner = centerX + 20
 
 
 var segment = preload("res://Scenes/Segment.tscn")
 var border = preload("res://Scenes/Border.tscn")
+var barrier = preload("res://Scenes/Barrier.tscn")
 
 func _ready():
 	pass
