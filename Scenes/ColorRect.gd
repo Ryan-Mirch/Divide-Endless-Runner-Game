@@ -45,7 +45,7 @@ func update_length(delta):
 	if !is_in_group("Leading"):
 		rect_position.y += pixelsToMove
 		
-	if rect_position.y > $"../Garbage".rect_position.y:
+	if rect_position.y > Global.botY:
 		queue_free()
 		
 func straighten():

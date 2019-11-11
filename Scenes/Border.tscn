@@ -1,34 +1,84 @@
 [gd_scene load_steps=3 format=2]
 
+[ext_resource path="res://Shapes/new_segmentshape2d.tres" type="Shape2D" id=1]
+
 [sub_resource type="GDScript" id=1]
-script/source = "extends Area2D
+script/source = "extends Line2D
+
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = \"text\"
-
+onready var segment = $\"Border/CollisionShape2D\"
+var leading = true
+var side = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
+func _process(delta):
+	update_position(delta)
+	
+func update_position(delta):
+	var pixelsToMove
+	var speed = Global.speed
+	
+	pixelsToMove = (speed * (delta))
+	
+	position.y += pixelsToMove
+	#print(position.y)
+	
+	if position.y + get_point_position(0).y  > Global.botY:
+		queue_free()
+		print(\"freed\")
+		
+	if position.y + get_point_position(0).y  > 0 && leading:
+		spawn_border()
+		print(\"spawned\")
+		
+func setPoints(p1,p2):
+	position = Vector2(0,0)
+	set_point_position(0, p1)
+	set_point_position(1, p2)
+	segment.shape.a = p1
+	segment.shape.b = p2
+		
+func spawn_border():
+	leading = false
+	
+	var newBorder = Global.border.instance()	
+	newBorder.side = side
+	get_parent().add_child(newBorder)	
+	
+	var P1X = 0
+	
+	if side == -1:
+		P1X = rand_range(Global.borderLimit_LeftOuter, Global.borderLimit_LeftInner)
+		
+	if side == 1:
+		P1X = rand_range(Global.borderLimit_RightOuter, Global.borderLimit_RightInner)
+	
+	P1X = round(P1X)
+	var P1 = Vector2(P1X,-500)
+	var P2 = get_point_position(0) + position
+	P2.y += 3
+	
+	newBorder.setPoints(P1, P2)
+	
+	
+	
+	
 "
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 19.7149, 806.304 )
-
-[node name="Border" type="ColorRect"]
-margin_right = 40.0
-margin_bottom = 1607.0
+[node name="Border" type="Line2D"]
+points = PoolVector2Array( 0, 0, 0, 0 )
+script = SubResource( 1 )
 
 [node name="Border" type="Area2D" parent="." groups=[
 "Barrier",
 ]]
-script = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Border"]
-position = Vector2( 20.4803, 807.351 )
-shape = SubResource( 2 )
+shape = ExtResource( 1 )

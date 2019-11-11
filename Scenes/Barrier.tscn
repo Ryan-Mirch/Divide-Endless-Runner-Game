@@ -9,7 +9,7 @@ script/source = "extends ColorRect
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	print(rect_position)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -47,16 +47,13 @@ func get_twin():
 "
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 67.1124, 20.8137 )
+extents = Vector2( 15, 15 )
 
 [node name="Barrier" type="ColorRect"]
-anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -528.0
-margin_top = 934.0
-margin_right = -391.0
-margin_bottom = -627.0
+margin_right = -870.0
+margin_bottom = -1570.0
 script = SubResource( 1 )
 
 [node name="Barrier" type="Area2D" parent="." groups=[
@@ -65,5 +62,5 @@ script = SubResource( 1 )
 script = SubResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier"]
-position = Vector2( 68.9339, 19.0043 )
+position = Vector2( 15, 15 )
 shape = SubResource( 3 )

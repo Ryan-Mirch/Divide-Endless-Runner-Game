@@ -4,10 +4,19 @@ var speed = 100
 
 var splitDelay = 0.1
 var lastSplit = 0
+var time = 0
 onready var segY = get_viewport().size.y - 250
+onready var botY = get_viewport().size.y
+onready var centerX = get_viewport().size.x / 2
+
+onready var borderLimit_LeftOuter = 10
+onready var borderLimit_LeftInner = centerX - 20
+onready var borderLimit_RightOuter = get_viewport().size.x - 10
+onready var borderLimit_RightInner = centerX + 20
 
 
 var segment = preload("res://Scenes/Segment.tscn")
+var border = preload("res://Scenes/Border.tscn")
 
 func _ready():
 	pass
@@ -15,6 +24,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	lastSplit +=delta
+	time += delta
 	
 	
 func _input(event):
