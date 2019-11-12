@@ -31,6 +31,7 @@ func _process(delta):
 	
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
+		
 		if lastSplit > splitDelay:
 			lastSplit = 0
 			var split = true
@@ -49,3 +50,46 @@ func _input(event):
 					n.straighten()
 			
 			
+func getCurrentBorderBounds():
+	
+	var rightBorder
+	var leftBorder
+	
+	for b in get_tree().get_nodes_in_group("Leading Border"):
+		if b.side == -1: leftBorder = b
+		if b.side == 1: rightBorder = b
+		
+	var LP1 = leftBorder.get_point_position(0) + leftBorder.position
+	var LP2 = leftBorder.get_point_position(1) + leftBorder.position
+	
+	var RP1 = rightBorder.get_point_position(0) + rightBorder.position
+	var RP2 = rightBorder.get_point_position(1) + rightBorder.position
+	
+	
+	
+	var leftBound = calculateXIntercept(LP1, calculateSlope(LP1,LP2))
+	var rightBound = calculateXIntercept(RP1, calculateSlope(RP1,RP2))
+	
+	print([leftBound, rightBound])
+	
+	return [leftBound, rightBound]
+	
+func calculateSlope(P1, P2):
+	var x1 = P1.x
+	var y1 = P1.y
+	var x2 = P2.x
+	var y2 = P2.y
+	
+	if x2-x1 == 0:
+		return 0
+	
+	return (y2-y1)/(x2-x1)
+	
+func calculateXIntercept(P1, m):
+	if m == 0:
+		return P1.x
+		
+	var b = P1.y - m*P1.x
+	return (0 - b)/m
+	
+	

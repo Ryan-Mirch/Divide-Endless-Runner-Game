@@ -66,6 +66,8 @@ func straighten():
 		seg.rect_position.x -= (rect_size.x / 2) - 1.5
 		
 func split():
+	
+	
 	if direction != 0: return
 	
 	remove_from_group("Leading")

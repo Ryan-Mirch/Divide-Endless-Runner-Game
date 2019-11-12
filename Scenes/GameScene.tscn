@@ -41,15 +41,18 @@ func initialize():
 	borderRight.setPoints(rightP1, rightP2)
 
 func addObstacle():
+	var bounds = Global.getCurrentBorderBounds()
 	var b = Global.obstacle.instance()
 	add_child(b)
-	b.initialize(rand_range(0.1, 2), Global.centerX + rand_range(-200, 200))
+	b.initialize(rand_range(0.1, 2), rand_range(bounds[0], bounds[1]))
 	
 func addBarrier():
+	var bounds = Global.getCurrentBorderBounds()
+	
 	var newBarrier = Global.barrier.instance()		
 	add_child(newBarrier)	
 	
-	var position = Global.centerX + rand_range(-200, 200)
+	var position = rand_range(bounds[0], bounds[1])
 	var size = rand_range(25, 50) / 2
 	var P1 = Vector2(position - size,0)
 	var P2 = Vector2(position + size,0)
