@@ -48,8 +48,8 @@ func setPoints(p1,p2):
 	segment.shape.b = p2
 		
 func spawn_border():
-	get_parent().addBarrier()
-	get_parent().addObstacle()
+	get_parent().createRandomBarrier()
+	get_parent().createRandomObstacle()
 	leading = false
 	remove_from_group(\"Leading Border\")
 	

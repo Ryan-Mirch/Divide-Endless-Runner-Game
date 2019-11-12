@@ -16,12 +16,17 @@ func _ready():
 	#pass
 	#print(Global.time)
 	
-func initialize():
-	
+func initialize():	
 	var seg = Global.segment.instance()
 	add_child(seg)
 	seg.rect_position = Vector2(Global.centerX, Global.segY)
 	
+	createInitialBorders()
+	
+	createObstacle(3, Global.centerX)
+	
+	
+func createInitialBorders():
 	var borderLeft = Global.border.instance()
 	var borderRight = Global.border.instance()
 	
@@ -39,21 +44,33 @@ func initialize():
 	
 	borderLeft.setPoints(leftP1, leftP2)
 	borderRight.setPoints(rightP1, rightP2)
-
-func addObstacle():
+	
+func createRandomObstacle():
 	var bounds = Global.getCurrentBorderBounds()
+
+	var size = rand_range(0.5, 2)
+	var position = rand_range(bounds[0], bounds[1])
+	createObstacle(size, position)
+
+func createObstacle(size, position):	
 	var b = Global.obstacle.instance()
 	add_child(b)
-	b.initialize(rand_range(0.1, 2), rand_range(bounds[0], bounds[1]))
+	b.initialize(size, position)
 	
-func addBarrier():
+	
+func createRandomBarrier():
+	var bounds = Global.getCurrentBorderBounds()
+	
+	var position = rand_range(bounds[0], bounds[1])
+	var size = rand_range(25, 50) / 2
+	createBarrier(size, position)
+
+func createBarrier(size, position):
 	var bounds = Global.getCurrentBorderBounds()
 	
 	var newBarrier = Global.barrier.instance()		
 	add_child(newBarrier)	
 	
-	var position = rand_range(bounds[0], bounds[1])
-	var size = rand_range(25, 50) / 2
 	var P1 = Vector2(position - size,0)
 	var P2 = Vector2(position + size,0)
 	
