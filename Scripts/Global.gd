@@ -1,10 +1,13 @@
 extends Node
 
 var speed = 100
-
 var splitDelay = 0.1
+var hazardFrequency = 20
+var barrierFrequency = 40
+
 var lastSplit = 0
 var time = 0
+
 onready var segY = get_viewport().size.y - 250
 onready var botY = get_viewport().size.y
 onready var centerX = get_viewport().size.x / 2

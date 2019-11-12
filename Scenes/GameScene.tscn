@@ -7,14 +7,20 @@ script/source = "extends Control
 # var a = 2
 # var b = \"text\"
 # Called when the node enters the scene tree for the first time.
+var hazardCheckFrequency = 0.7
+var barrierCheckFrequency = 0.4
+
+var hazardCheckTimer = 0
+var barrierCheckTimer = 0
+
 func _ready():
 	initialize()
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-	#pass
-	#print(Global.time)
+func _process(delta):
+	spawnHazardTry(delta)
+	spawnBarrierTry(delta)
 	
 func initialize():	
 	var seg = Global.segment.instance()
@@ -73,6 +79,27 @@ func createBarrier(size, position):
 	var P2 = Vector2(position + size,0)
 	
 	newBarrier.setPoints(P1, P2)
+	
+func spawnHazardTry(delta):
+	hazardCheckTimer += delta
+	if hazardCheckTimer < hazardCheckFrequency: return
+	print(\"check hazard\")
+	hazardCheckTimer = 0
+	
+	var chance = rand_range(0,100)
+	if chance < Global.hazardFrequency:
+		createRandomHazard()
+	
+func spawnBarrierTry(delta):
+	barrierCheckTimer += delta
+	if barrierCheckTimer < barrierCheckFrequency: return
+	print(\"check barrier\")
+	barrierCheckTimer = 0
+	
+	var chance = rand_range(0,100)
+	if chance < Global.barrierFrequency:
+		createRandomBarrier()
+	
 	
 	"
 
