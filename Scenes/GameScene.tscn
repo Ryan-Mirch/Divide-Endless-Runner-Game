@@ -23,7 +23,7 @@ func initialize():
 	
 	createInitialBorders()
 	
-	createObstacle(3, Global.centerX)
+	createHazard(3, Global.centerX)
 	
 	
 func createInitialBorders():
@@ -45,15 +45,15 @@ func createInitialBorders():
 	borderLeft.setPoints(leftP1, leftP2)
 	borderRight.setPoints(rightP1, rightP2)
 	
-func createRandomObstacle():
+func createRandomHazard():
 	var bounds = Global.getCurrentBorderBounds()
 
 	var size = rand_range(0.5, 2)
 	var position = rand_range(bounds[0], bounds[1])
-	createObstacle(size, position)
+	createHazard(size, position)
 
-func createObstacle(size, position):	
-	var b = Global.obstacle.instance()
+func createHazard(size, position):	
+	var b = Global.hazard.instance()
 	add_child(b)
 	b.initialize(size, position)
 	
@@ -65,9 +65,7 @@ func createRandomBarrier():
 	var size = rand_range(25, 50) / 2
 	createBarrier(size, position)
 
-func createBarrier(size, position):
-	var bounds = Global.getCurrentBorderBounds()
-	
+func createBarrier(size, position):	
 	var newBarrier = Global.barrier.instance()		
 	add_child(newBarrier)	
 	

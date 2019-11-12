@@ -31,15 +31,15 @@ func initialize(s, x):
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 15, 15 )
 
-[node name="Obstacle" type="ColorRect"]
+[node name="Hazard" type="ColorRect"]
 margin_right = 30.0
 margin_bottom = 30.0
 rect_pivot_offset = Vector2( 15, 15 )
 color = Color( 0.752941, 0.12549, 0.12549, 1 )
 script = SubResource( 1 )
 
-[node name="Obstacle" type="Area2D" parent="."]
+[node name="Hazard" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hazard"]
 position = Vector2( 15, 15 )
 shape = SubResource( 2 )

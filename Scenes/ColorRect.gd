@@ -119,6 +119,6 @@ func checkCombineCollisions():
 
 func _on_Area2D_area_entered(area):
 	if !is_in_group("Leading"): return
-	if area.name == "Barrier" || area.name == "Obstacle" || area.name == "Border":
+	if area.name == "Barrier" || area.name == "Hazard" || area.name == "Border":
 		remove_from_group("Leading")
 		$"Control/Area2D/CollisionShape2D".call_deferred("disabled",true)
