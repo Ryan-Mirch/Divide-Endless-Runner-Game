@@ -14,7 +14,9 @@ var leading = true
 var side = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	get_parent().addBarrier()
+	pass
+	
+	
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,6 +48,8 @@ func setPoints(p1,p2):
 	segment.shape.b = p2
 		
 func spawn_border():
+	get_parent().addBarrier()
+	get_parent().addObstacle()
 	leading = false
 	
 	var newBorder = Global.border.instance()	
@@ -74,6 +78,7 @@ func spawn_border():
 
 [node name="Border" type="Line2D"]
 points = PoolVector2Array( 0, 0, 0, 0 )
+texture_mode = -1111170616
 script = SubResource( 1 )
 
 [node name="Border" type="Area2D" parent="." groups=[

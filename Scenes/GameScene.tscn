@@ -12,8 +12,8 @@ func _ready():
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+#func _process(delta):
+	#pass
 	#print(Global.time)
 	
 func initialize():
@@ -40,10 +40,22 @@ func initialize():
 	borderLeft.setPoints(leftP1, leftP2)
 	borderRight.setPoints(rightP1, rightP2)
 
-func addBarrier():
-	var b = Global.barrier.instance()
+func addObstacle():
+	var b = Global.obstacle.instance()
 	add_child(b)
 	b.initialize(rand_range(0.1, 2), Global.centerX + rand_range(-200, 200))
+	
+func addBarrier():
+	var newBarrier = Global.barrier.instance()		
+	add_child(newBarrier)	
+	
+	var position = Global.centerX + rand_range(-200, 200)
+	var size = rand_range(25, 50) / 2
+	var P1 = Vector2(position - size,0)
+	var P2 = Vector2(position + size,0)
+	
+	newBarrier.setPoints(P1, P2)
+	
 	"
 
 [node name="GameScene" type="Control"]

@@ -16,8 +16,9 @@ onready var borderLimit_RightInner = centerX + 20
 
 
 var segment = preload("res://Scenes/Segment.tscn")
-var border = preload("res://Scenes/Border.tscn")
 var barrier = preload("res://Scenes/Barrier.tscn")
+var border = preload("res://Scenes/Border.tscn")
+var obstacle = preload("res://Scenes/Obstacle.tscn")
 
 func _ready():
 	pass
