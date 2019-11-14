@@ -26,8 +26,8 @@ func _draw():
 extents = Vector2( 2.44055, 1.51697 )
 
 [node name="Segment" type="ColorRect" groups=[
-"Segment",
 "Leading",
+"Segment",
 ]]
 anchor_left = 0.5
 anchor_top = 1.0

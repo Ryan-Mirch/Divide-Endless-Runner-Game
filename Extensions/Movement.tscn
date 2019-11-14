@@ -21,7 +21,7 @@ func _process(delta):
 	get_parent().position.y += pixelsToMove
 	
 	if get_parent().position.y + get_parent().get_point_position(0).y  > Global.botY:
-		queue_free()
+		get_parent().queue_free()
 		print(\"freed\")
 "
 
