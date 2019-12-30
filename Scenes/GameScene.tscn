@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Fonts/new_dynamicfont.tres" type="DynamicFont" id=1]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -14,13 +16,20 @@ var hazardCheckTimer = 0
 var barrierCheckTimer = 0
 
 func _ready():
-	initialize()
+	Global.connect(\"stateChange\",self,\"_state_changed\")
+	
+func _state_changed(s):
+	if s == \"Game\":
+		initialize()
+		visible = true
+	
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	spawnHazardTry(delta)
-	spawnBarrierTry(delta)
+	if Global.state == \"Game\":
+		spawnHazardTry(delta)
+		spawnBarrierTry(delta)
 	
 func initialize():	
 	var seg = Global.segment.instance()
@@ -103,8 +112,85 @@ func spawnBarrierTry(delta):
 	
 	"
 
-[node name="GameScene" type="Control"]
+[sub_resource type="GDScript" id=3]
+script/source = "extends Control
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	Global.connect(\"stateChange\",self,\"_state_changed\")
+	
+func _state_changed(s):
+	if s == \"Game\":
+		visible = false
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Button
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
+func _on_Start_pressed():
+	Global._set_state(\"Game\")
+"
+
+[node name="Main" type="Node"]
+
+[node name="GameScene" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 190, 630 )
 script = SubResource( 1 )
+
+[node name="MenuScene" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 3 )
+
+[node name="Title" type="Label" parent="MenuScene"]
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.4
+custom_fonts/font = ExtResource( 1 )
+text = "DiVide"
+align = 1
+valign = 1
+
+[node name="Menu Buttons" type="VBoxContainer" parent="MenuScene"]
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 5
+alignment = 1
+
+[node name="Start" type="Button" parent="MenuScene/Menu Buttons"]
+margin_top = 467.0
+margin_right = 900.0
+margin_bottom = 517.0
+rect_min_size = Vector2( 0, 50 )
+text = "Start"
+flat = true
+script = SubResource( 2 )
+
+[node name="Settings" type="Button" parent="MenuScene/Menu Buttons"]
+margin_top = 522.0
+margin_right = 900.0
+margin_bottom = 572.0
+rect_min_size = Vector2( 0, 50 )
+text = "Settings"
+flat = true
+[connection signal="pressed" from="MenuScene/Menu Buttons/Start" to="MenuScene/Menu Buttons/Start" method="_on_Start_pressed"]

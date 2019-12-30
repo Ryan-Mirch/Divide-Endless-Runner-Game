@@ -1,5 +1,7 @@
 extends Node
 
+signal stateChange
+
 var speed = 100
 var splitDelay = 0.1
 var hazardFrequency = 20
@@ -23,13 +25,20 @@ var barrier = preload("res://Scenes/Barrier.tscn")
 var border = preload("res://Scenes/Border.tscn")
 var hazard = preload("res://Scenes/Hazard.tscn")
 
+var state = "Menu"
+
 func _ready():
 	pass
 
+
+func _set_state(s):
+	state = s
+	emit_signal("stateChange", s)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	lastSplit +=delta
-	time += delta
+	if state == "Game":
+		lastSplit +=delta
+		time += delta
 	
 	
 func _input(event):
